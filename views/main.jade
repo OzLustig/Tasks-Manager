@@ -1,0 +1,58 @@
+extends layout
+
+block content
+    .menu
+        h2 Menu
+        ul.nav.nav-pills
+            li
+                a(href='/ideas') Home
+            li.active
+                a(href='/ideas') Todo List
+            li
+                a(href="/tasks/completed") Completed
+    h1= title
+    .list
+        .item.add-task
+            div.action
+            form(action="/idea", method='post')
+                div.title
+                    input(type='text', id='title', name='title', placeholder='Title goes here' required)
+                div.body
+                    input(type='text', id='body', name='body', placeholder='Body goes here')
+                div.date
+                    input(type="date" ,data-date-format='DD MMMM YYYY', value='1992-02-19', name='bdate')
+                div.delete
+                    input.btn.btn-primary.btn-sm(type="submit", value='submit')
+        if (tasks.length === 0)
+            | No tasks.
+        - var index = 0
+        each task in tasks
+            .item
+                div.action
+                    form(action='/idea_completed/#{task._id}', method='post')
+                        input(type='hidden', value='true', name='completed')
+                        input(type='submit', class='btn btn-success btn-xs task-done', value='done')
+                div.num
+                    span=index+1
+                    - index = index + 1
+                    |.&nbsp;
+                div.name
+                    span.name=task.title
+                div.body
+                    span.body=task.body
+                - var prettyDate_var = prettyDate(task.dueDate)
+                div.dueDate
+                    -function prettyDate(dateString){
+                    //if it's already a date object and not a string you don't need this line:
+                    -var date = new Date(dateString);
+                    -var d = date.getDate();
+                    -var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+                    -var m = monthNames[date.getMonth()];
+                    -var y = date.getFullYear();
+                    -return d+' '+m+' '+y;
+                    -}
+                    span.dueDate=prettyDate_var
+                div.action
+                    form(action='/idea_delete/#{task._id}', method='post')
+                        input(type='hidden', value='true', name='completed')
+                        input(type='submit', class='btn btn-danger btn-xs task-delete', value='delete')

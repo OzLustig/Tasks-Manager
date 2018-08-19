@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    .container
+        h1 Registration
+        p.lead Create an account. Already have one?
+            a(href='/users/login')  Login Now.
+        form(role='form', action='/users/register', method='post')
+            if failure
+                h4 Wrong user credentials
+            .form-group
+                label(for='username') Username
+                input.form-control(type='text', id='username', name='username', placeholder='enter a username')
+            .form-group
+                label(for='email') Email
+                input.form-control(type='text', id='email', name='email', placeholder='enter an E-mail')
+            .form-group
+                label(for='password') Password
+                input.form-control(type='password', id='password', name='password', placeholder='enter a password')
+            button.btn.btn-primary(type='submit') Submit
+        &nbsp;
+    a.btn.btn-default(href='/', role='button') Cancel
+
+h4.text-danger= info
